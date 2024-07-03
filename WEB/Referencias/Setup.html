@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modding Minecraft 1.21</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="../index.html">Inicio</a></li>
+            <li><a href="Setup.html">Primeros Pasos</a></li>
+            <li><a href="">Items</a></li>
+            <li><a href="">Bloques</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <section id="setup">
+            <h1>Primeros Pasos</h1>
+
+            <h3>Índice</h3>
+            <ol>
+                <li><a href="#instalar-jdk">Instalar JDK</a></li>
+                <li><a href="#instalar-ide">Instalar IDE</a></li>
+                <li><a href="#instalar-forge">Instalar Forge</a></li>
+                <li><a href="#creacion-mod-prueba">Creación mod de prueba</a></li>
+                <li><a href="#configurar-parchment">Configurar Parchment</a></li>
+                <li><a href="#ejecutar-cliente">Ejecutar el Cliente</a></li>
+            </ol>
+
+            <h3 id="instalar-jdk">Instalar JDK</h3>
+            <p>Lo primero será descargar un JDK, en nuestro caso Eclipse Temurin. Lo descargamos desde <a href="https://adoptium.net/temurin/releases/?package=jdk&version=22">Adoptium</a>. Seleccionamos el sistema operativo deseado.</p>
+            <img src="../img/image-1.png" alt="Eclipse Temurin">
+
+            <p>Seleccionamos "Establecer la variable JAVA_HOME" y lo instalaremos en la unidad de disco duro local.</p>
+            <img src="../img/image-2.png" alt="Instalación JDK">
+
+            <h3 id="instalar-ide">Instalar IDE</h3>
+            <p>Una vez instalado el JDK, necesitaremos un IDE. Nosotros usaremos <a href="https://www.jetbrains.com/idea/download/?section=windows">Intellij IDEA Community Edition</a>.</p>
+            <img src="../img/image-2.png" alt="IntelliJ IDEA">
+
+            <p>En la instalación, seleccionamos las siguientes casillas.</p>
+            <img src="../img/image-3.png" alt="Instalación IntelliJ">
+
+            <h3 id="instalar-forge">Instalar Forge</h3>
+            <p>Vamos a la página de <a href="https://files.minecraftforge.net/net/minecraftforge/forge/index_1.21.html">FORGE</a> y descargamos el Mdk de la última versión.</p>
+            <img src="../img/image-4.png" alt="Descargar Forge">
+
+            <p>Se nos descargará un zip. Lo descomprimimos en una carpeta y copiamos la ruta.</p>
+            <pre>C:\Data\MOOOO\forge-1.21</pre>
+            <p>Abrimos nuestro IDE y seleccionamos la carpeta.</p>
+            <img src="../img/image-5.png" alt="Seleccionar carpeta en IDE">
+
+            <p>En la parte inferior izquierda, veremos un icono de un martillo "Build". Aquí podemos ver que se está descargando todo lo necesario para que el proyecto funcione. Esperamos hasta ver "BUILD SUCCESSFUL", esto puede tardar unos minutos.</p>
+
+            <p>Entramos en <code>File > Proyect Structure...</code> Colocamos el SDK y el nivel de lenguaje en el mismo número.</p>
+            <img src="../img/image-6.png" alt="Configuración de SDK">
+
+            <p>Ahora entramos en <code>File > Settings > Build, Execution, Deployment > Build Tools > Gradle</code> y colocamos el Gradle JVM en "Project SDK" o "JAVA_HOME" según deseemos.</p>
+            <img src="../img/image-7.png" alt="Configuración de Gradle">
+
+            <h3 id="creacion-mod-prueba">Creación mod de prueba</h3>
+            <p>Esto no es obligatorio pero podemos cambiar la estructura de carpetas. Necesitaremos desmarcar las siguientes opciones.</p>
+            <img src="../img/image-8.png" alt="Configuración de carpetas">
+
+            <p>Entramos en <code>ExampleMod.java</code> y modificamos el contenido por el fichero <code>TMod.java</code> que se encuentra en este repositorio. Este archivo continene las clases limpias, modifica el mod_id y cambia la estructura de carpetas.</p>
+
+            <p>Las dependencias se encuentran en <code>resources > META-INF > mods.toml</code></p>
+            <p>Es necesario modificar el archivo <code>gradle.properties</code>, lo ajustamos a nuestro <code>TMod.java</code></p>
+
+            <pre><code class="language-yml">## Mod Properties
+
+# The unique mod identifier for the mod. Must be lowercase in English locale. Must fit the regex [a-z][a-z0-9_]{1,63}
+# Must match the String constant located in the main mod class annotated with @Mod.
+mod_id=tmod
+# The human-readable display name for the mod.
+mod_name=TMod
+# The license of the mod. Review your options at https://choosealicense.com/. All Rights Reserved is the default.
+mod_license=MIT
+# The mod version. See https://semver.org/
+mod_version=0.1-1.21
+# The group ID for the mod. It is only important when publishing as an artifact to a Maven repository.
+# This should match the base package used for the mod sources.
+# See https://maven.apache.org/guides/mini/guide-naming-conventions.html
+mod_group_id=net.placido.tmod
+# The authors of the mod. This is a simple text string that is used for display purposes in the mod list.
+mod_authors=Placido
+# The description of the mod. This is a simple multiline text string that is used for display purposes in the mod list.
+mod_description=Example mod for testing.
+</code></pre>
+
+            <h3 id="configurar-parchment">Configurar Parchment</h3>
+            <p>Ahora cambiamos el <code>mapping_channel</code> a <a href="https://parchmentmc.org/docs/getting-started">Parchment</a>, para ello necesitamos seguir el Getting Started que nos ofrece la web.</p>
+
+            <p>En nuestro caso, en <code>settings.gradle</code> añadimos lo siguiente:</p>
+            <pre><code class="language-java">pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
+        maven { url = 'https://maven.parchmentmc.org' } // Añadido
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
+}</code></pre>
+
+            <p>En <code>build.gradle</code> añadimos el siguiente id:</p>
+            <pre><code class="language-java">plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+' // Añadido
+}</code></pre>
+
+            <p>Y por último colocamos la versión correspondiente en <code>gradle.properties</code>:</p>
+            <pre><code class="language-yml">mapping_channel=parchment
+# The mapping version to query from the mapping channel.
+# This must match the format required by the mapping channel.
+mapping_version=2024.06.23-1.21
+</code></pre>
+
+            <p>Para guardar los cambios pulsamos en el icono del elefante que se nos muestra arriba a la derecha, pulsamos en "Load Gradle Changes".</p>
+
+            <p>Abrimos la terminal y colocamos <code>./gradlew genIntellijRuns</code> para terminar de descargarlo todo.</p>
+
+            <h3 id="ejecutar-cliente">Ejecutar el Cliente</h3>
+            <p>Para poder ejecutar el cliente, necesitamos ir a la parte superior derecha de la pantalla, allí veremos un elefante. Al hacer click sobre él, se abrirá una ventana en la que tendremos que seleccionar <code>Task > forgegradle runs > runClient</code></p>
+            <img src="../img/image-9.png" alt="Ejecutar cliente">
+        </section>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <h4>Visita mi Portfolio</h4>
+                <p><a href="https://placidodiaz.es/">placidodiaz.es</a></p>
+            </div>
+            <div class="footer-right">
+                <h4>Deja una estrella en el repositorio</h4>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Modding Minecraft 1.21. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
