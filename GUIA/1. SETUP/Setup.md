@@ -12,7 +12,7 @@
 ### Instalar JDK
 Lo primero será descargar un JDK, en nuestro caso Eclipse Temurin. Lo descargamos desde [Adoptium](https://adoptium.net/temurin/releases/?package=jdk&version=22). Seleccionamos el sistema operativo deseado.
 
-![alt text](img/image-1.png)
+![alt text](img/image.png)
 
 Seleccionamos "Establecer la variable JAVA_HOME" y lo instalaremos en la unidad de disco duro local.
 
