@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modding Minecraft 1.21 - Items</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="../index.html">Inicio</a></li>
+            <li><a href="Setup.html">Primeros Pasos</a></li>
+            <li><a href="Items.html">Items</a></li>
+            <li><a href="">Bloques</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <section id="items">
+            <h1>Items</h1>
+
+            <h3>Índice</h3>
+            <ol>
+                <li><a href="#crear-una-nueva-clase">Crear una Nueva Clase</a></li>
+                <li><a href="#asegurar-que-los-items-se-anadan">Asegurar que los Items se Añadan</a></li>
+                <li><a href="#anadir-item">Añadir Item</a></li>
+                <li><a href="#crear-estructura-de-carpetas">Crear Estructura de Carpetas</a></li>
+                <li><a href="#anadir-nombre">Añadir Nombre al Objeto</a></li>
+                <li><a href="#anadir-textura">Añadir Textura al Objeto</a></li>
+                <li><a href="#crear-nuevo-objeto">Crear Nuevo Objeto</a></li>
+                <li><a href="#crear-tab">Crear Tab Personalizado</a></li>
+            </ol>
+
+            <h3 id="crear-una-nueva-clase">Crear una Nueva Clase</h3>
+            <p>Hacemos click sobre la carpeta de nuestro mod <code>New > Package</code> y creamos la carpeta <code>item</code></p>
+            <img src="../img/Items/image.png" alt="Crear paquete item">
+
+            <p>En su interior creamos una clase de Java y añadimos lo siguiente:</p>
+            <pre><code>public class ModItems {
+    public static final DeferredRegister&lt;Item&gt; ITEMS =
+            DeferredRegister.create(ForgeRegistries.ITEMS, TMod.MODID);
+}</code></pre>
+            <img src="../img/Items/image-1.png" alt="Clase ModItems">
+
+            <p>Probablemente aparezcan varios errores. Si colocamos el ratón encima del error, nos dará una posible solución. Haciendo click en "More actions..." nos permitirá migrar lo necesario.</p>
+            <p><strong>DeferredRegister</strong> es básicamente una lista de items que cargará Forge al iniciarse.</p>
+
+            <h3 id="asegurar-que-los-items-se-anadan">Asegurar que los Items se Añadan</h3>
+            <p>Creamos el método <code>register</code>, el cual recibe el parámetro <code>eventBus</code>:</p>
+            <pre><code>public class ModItems {
+    public static final DeferredRegister&lt;Item&gt; ITEMS =
+            DeferredRegister.create(ForgeRegistries.ITEMS, TMod.MODID);
+
+    public static void register(IEventBus eventBus) {
+        ITEMS.register(eventBus);
+    }
+}</code></pre>
+
+            <p>Y en nuestro <code>TMod.java</code>, hacemos una llamada al método <code>register</code>:</p>
+            <pre><code>public TMod() {
+    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    ModItems.register(modEventBus); // Añadido
+    ...
+}</code></pre>
+
+            <h3 id="anadir-item">Añadir Item</h3>
+            <p>Para registrar un item nuevo, añadimos lo siguiente:</p>
+            <pre><code>public class ModItems {
+    public static final DeferredRegister&lt;Item&gt; ITEMS =
+            DeferredRegister.create(ForgeRegistries.ITEMS, TMod.MODID);
+
+    public static final RegistryObject&lt;Item&gt; ADAMANT = ITEMS.register("adamant",
+            () -> new Item(new Item.Properties()));
+
+    ...
+}</code></pre>
+
+            <p>En nuestro <code>TMod.java</code>, añadimos lo siguiente en el método <code>addCreative</code>:</p>
+            <pre><code>private void addCreative(BuildCreativeModeTabContentsEvent event) {
+    if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+        event.accept(ModItems.ADAMANT);
+    }
+}</code></pre>
+
+            <p>Esto hace que cuando se abra el tab en creativo para ver los objetos, se añada el item <code>ADAMANT</code> a los ingredientes.</p>
+
+            <h3 id="crear-estructura-de-carpetas">Crear Estructura de Carpetas</h3>
+            <p>Hacemos click derecho sobre la carpeta <code>resources</code>. Dentro, creamos un directorio llamado <code>assets</code>. En su interior, creamos otro con el nombre de nuestro <code>MODID</code>.</p>
+            <img src="../img/Items/image-2.png" alt="Crear estructura de carpetas">
+
+            <p>Creamos la siguiente estructura de carpetas:</p>
+            <pre><code>└── tmod                    
+    ├── lang          
+    ├── models    
+    │   └── item      
+    └── textures  
+        └── item</code></pre>
+            <p>Es muy importante que las carpetas se llamen igual.</p>
+
+            <h3 id="anadir-nombre">Añadir Nombre al Objeto</h3>
+            <p>En la carpeta <code>lang</code> se almacenan los idiomas. En nuestro caso, creamos un archivo llamado <code>es_es.json</code>.</p>
+            <p>En este archivo colocamos el nombre que recibirá el objeto:</p>
+            <pre><code>{
+  "item.tmod.adamant": "Adamant"
+}</code></pre>
+
+            <p>Es importante que <code>tmod</code> sea el <code>MODID</code> y <code>adamant</code> sea exactamente el nombre que colocamos en la clase <code>ModItems</code>.</p>
+
+            <h3 id="anadir-textura">Añadir Textura al Objeto</h3>
+            <p>Para crear la textura, añadimos en la carpeta <code>models > item</code> un archivo llamado <code>adamant.json</code> y colocamos lo siguiente:</p>
+            <pre><code>{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "tmod:item/adamant"
+  }
+}</code></pre>
+
+            <p><strong>Parent:</strong> Determina cómo se va a mostrar el objeto. Toma la textura 2D y la expande un poco para dar la ilusión de una textura 3D en nuestra mano.</p>
+            <p><strong>Textures:</strong> Definimos <code>tmod</code> que es el directorio padre, <code>item</code> es el directorio que le sigue y <code>adamant</code> es un archivo png que está buscando en su interior.</p>
+            <img src="../img/Items/image-3.png" alt="Añadir textura al objeto">
+
+            <p>Una vez añadida la textura, abrimos Minecraft como vimos en el apartado de "Primeros Pasos".</p>
+            <p>Iniciamos un mundo en creativo, abrimos el inventario y si navegamos al tab de ingredientes veremos nuestro nuevo item.</p>
+            <img src="../img/Items/image-4.png" alt="Nuevo item en el inventario">
+            <img src="../img/Items/image-5.png" alt="Nuevo item en el tab de ingredientes">
+
+            <h3 id="crear-nuevo-objeto">Crear Nuevo Objeto</h3>
+            <p>Para crear un nuevo objeto, iremos a la clase <code>ModItems.java</code> y solo tendremos que añadir lo siguiente:</p>
+            <pre><code>...
+public static final RegistryObject&lt;Item&gt; RAW_ADAMANT = ITEMS.register("raw_adamant",
+        () -> new Item(new Item.Properties()));
+...
+</code></pre>
+
+            <p>En <code>TMod.java</code> añadiremos el objeto en <code>addCreative</code>:</p>
+            <pre><code>event.accept(ModItems.RAW_ADAMANT);</code></pre>
+
+            <p>Le añadimos un nombre en nuestro <code>es_es.json</code>:</p>
+            <pre><code>{
+  "item.tmod.adamant": "Adamant",
+  "item.tmod.raw_adamant": "Raw Adamant"
+}</code></pre>
+
+            <p>Añadimos un <code>raw_adamant.json</code> en <code>models > item</code>:</p>
+            <pre><code>{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "tmod:item/raw_adamant"
+  }
+}</code></pre>
+
+            <p>Le colocamos la textura que deseemos.</p>
+
+            <h3 id="crear-tab">Crear Tab Personalizado</h3>
+            <p>Creamos una clase en <code>tmod > item</code> llamada <code>ModCreativeModTabs.java</code> con el siguiente contenido:</p>
+            <pre><code>public class ModCreativeModTabs {
+    public static final DeferredRegister&lt;CreativeModeTab&gt; CREATIVE_MODE_TAB =
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TMod.MODID);
+
+    public static void register(IEventBus eventBus) {
+        CREATIVE_MODE_TAB.register(eventBus);
+    }
+}</code></pre>
+            <img src="../img/Items/image-6.png" alt="Clase ModCreativeModTabs">
+
+            <p>Ahora iremos a <code>TMod.java</code> y haremos una llamada al método creado:</p>
+            <pre><code>public TMod() {
+    IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    ModCreativeModTabs.register(modEventBus);
+    ...
+}</code></pre>
+
+            <p>Añadimos lo siguiente en <code>ModCreativeModTabs.java</code>:</p>
+            <pre><code>...
+public static final RegistryObject&lt;CreativeModeTab&gt; TUTORIAL_TAB = CREATIVE_MODE_TAB.register("tutorial_tab",
+        () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.ADAMANT.get()))
+                .title(Component.translatable("creativetab.tutorial_tab"))
+                .displayItems((pParameters, pOutput) -> {
+                    pOutput.accept(ModItems.ADAMANT.get());
+                    pOutput.accept(ModItems.RAW_ADAMANT.get());
+
+                    // Añadir items Vanilla
+                    pOutput.accept(Items.DIAMOND); // GET es solo para items custom
+                })
+                .build());
+...
+</code></pre>
+            <img src="../img/Items/image-7.png" alt="Añadir tab personalizado">
+
+            <p>Ahora añadimos la traducción en el fichero <code>es_es.json</code>:</p>
+            <pre><code>{
+  "item.tmod.adamant": "Adamant",
+  "item.tmod.raw_adamant": "Raw Adamant",
+  "creativetab.tutorial_tab": "Tutorial Tab"
+}</code></pre>
+
+            <p>Si abrimos Minecraft de nuevo, veremos que tenemos un nuevo tab y el nuevo item.</p>
+            <img src="../img/Items/image-8.png" alt="Nuevo tab personalizado">
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <h4>Visita mi Portfolio</h4>
+                <p><a href="https://placidodiaz.es/">placidodiaz.es</a></p>
+            </div>
+            <div class="footer-right">
+                <h4>Deja una estrella en el repositorio</h4>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Modding Minecraft 1.21. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
