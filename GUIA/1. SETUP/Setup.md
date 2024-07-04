@@ -12,27 +12,27 @@
 ### Instalar JDK
 Lo primero será descargar un JDK, en nuestro caso Eclipse Temurin. Lo descargamos desde [Adoptium](https://adoptium.net/temurin/releases/?package=jdk&version=22). Seleccionamos el sistema operativo deseado.
 
-![alt text](../img/image-1.png)
+![alt text](img/image-1.png)
 
 Seleccionamos "Establecer la variable JAVA_HOME" y lo instalaremos en la unidad de disco duro local.
 
-![alt text](../img/image-1.png)
+![alt text](img/image-1.png)
 
 ### Instalar IDE
 
 Una vez instalado el JDK, necesitaremos un IDE. Nosotros usaremos [Intellij IDEA Community Edition](https://www.jetbrains.com/idea/download/?section=windows).
 
-![alt text](../img/image-2.png)
+![alt text](img/image-2.png)
 
 En la instalación, seleccionamos las siguientes casillas.
 
-![alt text](../img/image-3.png)
+![alt text](img/image-3.png)
 
 ### Instalar Forge
 
 Vamos a la página de [FORGE](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.21.html) y descargamos el Mdk de la última versión.
 
-![alt text](../img/image-4.png)
+![alt text](img/image-4.png)
 
 Se nos descargará un zip. Lo descomprimimos en una carpeta y copiamos la ruta.
 
@@ -40,23 +40,23 @@ Se nos descargará un zip. Lo descomprimimos en una carpeta y copiamos la ruta.
 
 Abrimos nuestro IDE y seleccionamos la carpeta.
 
-![alt text](../img/image-5.png)
+![alt text](img/image-5.png)
 
 En la parte inferior izquierda, veremos un icono de un martillo "Build". Aquí podemos ver que se está descargando todo lo necesario para que el proyecto funcione. Esperamos hasta ver "BUILD SUCCESSFUL", esto puede tardar unos minutos.
 
 Entramos en ``File > Proyect Structure...`` Colocamos el SDK y el nivel de lenguaje en el mismo número.
 
-![alt text](../img/image-6.png)
+![alt text](img/image-6.png)
 
 Ahora entramos en ``File > Settings > Build, Execution, Deployment > Build Tools > Gradle`` y colocamos el Gradle JVM en "Project SDK" o "JAVA_HOME" según deseemos.
 
-![alt text](../img/image-7.png)
+![alt text](img/image-7.png)
 
 ### Creación mod de prueba
 
 Esto no es obligatorio pero podemos cambiar la estructura de carpetas. Necesitaremos desmarcar las siguientes opciones.
 
-![alt text](../img/image-8.png)
+![alt text](img/image-8.png)
 
 Entramos en ``ExampleMod.java`` y modificamos el contenido por el fichero ``TMod.java`` que se encuentra en este repositorio. Este archivo continene las clases limpias, modifica el mod_id y cambia la estructura de carpetas.
 
@@ -139,4 +139,4 @@ Abrimos la terminal y colocamos ``./gradlew genIntellijRuns`` para terminar de d
 
 Para poder ejecutar el cliente, necesitamos ir a la parte superior derecha de la pantalla, allí veremos un elefante. Al hacer click sobre él, se abrirá una ventana en la que tendremos que seleccionar ``Task > forgegradle runs > runClient``
 
-![alt text](../img/image-9.png)
+![alt text](img/image-9.png)
